@@ -28,7 +28,8 @@ for ds in dataSets:
     #Reading the training data in a csv file using pandas
     # --> add your Python code here
     df_train = pd.read_csv(ds)
-    dbTraining = df_train.values.tolist()
+    for _, row in df_train.iterrows():
+        dbTraining.append(row.tolist())
 
     #Transform the original categorical training features to numbers and add to the 4D array X.
     #For instance Young = 1, Prepresbyopic = 2, Presbyopic = 3, X = [[1, 1, 1, 1], [2, 2, 2, 2], ...]]
@@ -37,7 +38,7 @@ for ds in dataSets:
     spectacle = {"Myope": 1, "Hypermetrope": 2}
     astigmatism = {"Yes": 1, "No": 2}
     tear = {"Reduced": 1, "Normal": 2}
-    lenses = {"Yes": 1, "No": 0}
+    lenses = {"Yes": 1 , "No": 2}
 
     for row in dbTraining:
         X.append([age[row[0]], spectacle[row[1]], astigmatism[row[2]], tear[row[3]]])
@@ -47,7 +48,7 @@ for ds in dataSets:
     for row in dbTraining:
         Y.append(lenses[row[4]])
     #Loop your training and test tasks 10 times here
-    accuracies = []
+    accuracies = 0
     for i in range (10):
 
        # fitting the decision tree to the data using entropy as your impurity measure and maximum depth = 5
@@ -72,11 +73,11 @@ for ds in dataSets:
                 correct += 1
 
        accuracy = correct / len(dbTest)
-       accuracies.append(accuracy)
+       accuracies += accuracy
 
     #Find the average of this model during the 10 runs (training and test set)
     #--> add your Python code here
-    avg_accuracy = sum(accuracies) / len(accuracies)
+    avg_accuracy = accuracies / 10
 
     #Print the average accuracy of this model during the 10 runs (training and test set).
     #Your output should be something like that: final accuracy when training on contact_lens_training_1.csv: 0.2
